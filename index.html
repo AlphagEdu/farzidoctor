@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FarziDoctor</title>
+    <title>FarziDoctor🧑🏻‍⚕️</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -95,39 +95,40 @@
     </div>
 
     <script>
-        async function generateReport() {
-            const name = document.getElementById('name').value;
-            const regDate = document.getElementById('regDate').value;
-            const sampleCollection = document.getElementById('sampleCollection').value;
-            const printDate = document.getElementById('printDate').value;
-            const age = document.getElementById('age').value;
-            const gender = document.getElementById('gender').value;
+       async function generateReport() {
+    const name = document.getElementById('name').value;
+    const regDate = document.getElementById('regDate').value;
+    const sampleCollection = document.getElementById('sampleCollection').value;
+    const printDate = document.getElementById('printDate').value;
+    const age = document.getElementById('age').value;
+    const gender = document.getElementById('gender').value;
 
-            if (!name || !regDate || !sampleCollection || !printDate || !age || !gender) {
-                alert("All fields are required!");
-                return;
-            }
+    if (!name || !regDate || !sampleCollection || !printDate || !age || !gender) {
+        alert("All fields are required!");
+        return;
+    }
 
-            const response = await fetch('/api/generateReport', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, regDate, sampleCollection, printDate, age, gender })
-            });
+    const response = await fetch('/api/generateReport', { // ✅ Change this line
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, regDate, sampleCollection, printDate, age, gender })
+    });
 
-            if (!response.ok) {
-                alert("An error occurred while generating the report.");
-                return;
-            }
+    if (!response.ok) {
+        alert("An error occurred while generating the report.");
+        return;
+    }
 
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'updated_report.docx';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        }
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'report.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
     </script>
 </body>
 </html>
