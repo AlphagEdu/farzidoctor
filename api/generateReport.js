@@ -13,7 +13,7 @@ export default async function handler(req, res) {
             return res.status(400).json({ error: "All fields are required" });
         }
 
-        // Generate a simple text report (can be converted to DOCX)
+        // Generate report content
         const reportContent = `
             Patient Name: ${name}
             Registration Date: ${regDate}
@@ -23,18 +23,23 @@ export default async function handler(req, res) {
             Gender: ${gender}
         `;
 
-        // Save the file to Vercel's temporary directory
+        // Define the temporary file path (only valid during request execution)
         const filePath = path.join("/tmp", "report.txt");
+
+        // Write the report to a file
         const stream = createWriteStream(filePath);
         stream.write(reportContent);
         stream.end();
+
+        // Wait for the file to be written completely
+        await new Promise((resolve) => stream.on("finish", resolve));
 
         // Send the file as a response
         res.setHeader("Content-Disposition", "attachment; filename=report.txt");
         res.setHeader("Content-Type", "text/plain");
         res.sendFile(filePath);
     } catch (error) {
-        console.error(error);
+        console.error("Error generating report:", error);
         res.status(500).json({ error: "Failed to generate report" });
     }
 }
